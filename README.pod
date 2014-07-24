@@ -1,0 +1,169 @@
+=head1 NAME
+
+weasel - evolution simulation based on Dawkins' Weasel
+
+=head1 SYNOPSIS
+
+ weasel [options]
+ weasel (--help|--version)
+
+=head1 DESCRIPTION
+
+A basic evolution simulation based on
+L<Dawkins' Weasel|http://en.wikipedia.org/wiki/Weasel_program> which attempts
+to account for variation in the reproduction process itself rather than
+enforcing fixed reproduction and mutation rates.  A simple implementation of
+the original can be found in F<weasel1.c>.
+
+=head2 Differences
+
+=over
+
+=item Scoring
+
+Original: each gene (letter) scored as either a perfect match or a total
+failure.  
+
+Updated: each gene is scored based on its proximity to the correct letter.
+
+=item Reproduction Rate and Mutation Rate
+
+Original: reproduction rate and mutation rate were fixed.
+
+Updated: each organism reproduces and mutates at a different rate and those
+rates themselves mutate.
+
+=item Mutation
+
+Original: mutation rate is represented with a fixed probability of mutation.
+Each gene was individually tested and, if it mutated, replaced by a random gene
+from the available pool.
+
+Updated: the mutation rate is represented via standard deviation.  A random
+number is generated according to a standard normal distribution and multiplied
+by the mutation rate.  The resulting number is added to the current value of
+the gene, such that values adjacent to the original gene are more likely than
+distant ones.
+
+=item Population Size
+
+Original: only the highest scoring organism survived to reproduce.
+
+Updated: a configurable number of organisms survive each generation.  This
+allows competition via reproduction rate.
+
+=back
+
+=head1 OPTIONS
+
+=over
+
+=item B<-p>, B<--population>=I<i>
+
+Population limit (default: C<5>).
+
+=item B<-t>, B<--target>=I<s>
+
+Target string (default: C<METHINKS IT IS LIKE A WEASEL>).
+
+=item B<-s>, B<--seed>=I<i>
+
+Provide seed for random number generator for reproducible runs.
+
+=item B<-g>, B<--pool>=I<s>
+
+Specify the available gene pool (default: C< ABCDEFGHIJKLMNOPQRSTUVWXYZ>).
+
+=item B<-m>, B<--mutation>=I<i>
+
+Initial mutation rate (default: C<5>).
+
+=item B<-r>, B<--reproduction>=I<i>
+
+Initial reproduction rate (default: C<1>).
+
+=item B<-h>, B<--help>
+
+Display program usage information.
+
+=item B<-V>, B<--version>
+
+Display program version.
+
+=item B<-v>, B<--verbose>
+
+Display additional information.
+
+=back
+
+=head1 EXAMPLES
+
+weasel2 --population 2 --target WEASEL --reproduction 500 --mutation 0.1 --seed 9
+
+ pool: ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+ target: 'WEASEL' (162)
+ population size: 2
+ random seed: 9
+ <id>: (<parent>) '<value>' (<reproduction>/<mutation>) (<score>)
+ ---[ Generation 1 ]-----------------------------
+ 1: 'DHGVBK' (500/0.100000) (127)
+ ---[ Generation 2: Avg Score: 127 (78%) ]------------------
+ 1: (1) 'DHGVBK' (500/0.015311) (127)
+ 2: (1) 'DHGVBK' (500/0.328962) (127)
+ ---[ Generation 3: Avg Score: 127 (78%) ]------------------
+ 1: (2) 'EHGVBK' (500/0.547189) (128)
+ 2: (1) 'DHGVBK' (500/0.010542) (127)
+ ---[ Generation 4: Avg Score: 130 (80%) ]------------------
+ 1: (1) 'EGGUBK' (500/1.707568) (130)
+ 2: (1) 'EGGVCK' (500/0.984900) (130)
+ ---[ Generation 5: Avg Score: 138 (85%) ]------------------
+ 1: (1) 'GGCUDK' (500/3.477056) (138)
+ 2: (1) 'HDGSCL' (500/3.836596) (138)
+ ---[ Generation 6: Avg Score: 148 (91%) ]------------------
+ 1: (1) 'WIEOEM' (494/1.033034) (149)
+ 2: (2) 'RACQDL' (505/0.922031) (148)
+ ---[ Generation 7: Avg Score: 153 (94%) ]------------------
+ 1: (1) 'WICQEM' (495/1.867143) (153)
+ 2: (1) 'WHCPDL' (493/0.381564) (153)
+ ---[ Generation 8: Avg Score: 159 (98%) ]------------------
+ 1: (1) 'WDBSEL' (495/2.220129) (160)
+ 2: (1) 'VFAREL' (496/-0.285128) (159)
+ ---[ Generation 9: Avg Score: 160 (98%) ]------------------
+ 1: (1) 'WDASEL' (495/3.347828) (161)
+ 2: (1) 'WD SEL' (495/0.553717) (160)
+ ---[ Generation 10: Avg Score: 161 (99%) ]------------------
+ 1: (1) 'WDASEL' (494/4.857840) (161)
+ 2: (2) 'WE SEL' (495/1.377056) (161)
+ ---[ Generation 11: Avg Score: 162 (100%) ]------------------
+ 1: (2) 'WEASEL' (492/-2.104459) (162)
+ 2: (2) 'WEASEL' (496/0.528725) (162)
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Dawkins' Weasel|http://en.wikipedia.org/wiki/Weasel_program>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2014 Andrew Gregory <andrew.gregory.8@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
