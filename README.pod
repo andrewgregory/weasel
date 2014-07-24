@@ -98,7 +98,7 @@ Display additional information.
 
 =head1 EXAMPLES
 
-weasel2 --population 2 --target WEASEL --reproduction 500 --mutation 0.1 --seed 9
+ weasel --population 2 --target WEASEL --reproduction 500 --mutation 0.1 --seed 9
 
  pool: ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  target: 'WEASEL' (162)
